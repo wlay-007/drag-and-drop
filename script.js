@@ -8,6 +8,16 @@ main.addEventListener('touchmove', touchMove);
 main.addEventListener('touchend', touchEnd);
 main.addEventListener('touchcancel', touchCancel);
 
+window.addEventListener('load',()=>{
+    console.log('h');
+    for (const block of blocks) {
+        console.log(block.getBoundingClientRect().x, block.getBoundingClientRect().y)
+        if(block.getBoundingClientRect().x == localStorage.getItem('coordX') && block.getBoundingClientRect().y == localStorage.getItem('coordY')){
+            console.log(block);
+            block.append(main);
+        }
+    }
+})
 //drag
 main.addEventListener('dragstart', dragStart);
 main.addEventListener('dragend', dragEnd);
@@ -37,7 +47,10 @@ function dragLeave(){
 function dragOver (event){
     event.preventDefault();
 }
-function drop (){
+function drop (event){
+    
+    localStorage.setItem('coordX', JSON.stringify(this.getBoundingClientRect().x))
+    localStorage.setItem('coordY', JSON.stringify(this.getBoundingClientRect().y))
     this.append(main);
     this.classList.remove('active');
 }
@@ -69,6 +82,8 @@ function touchMove(event){
 function touchEnd(){
     if(appendItem.classList.contains('active')){
         appendItem.append(main);
+        localStorage.setItem('coordX', JSON.stringify(appendItem.getBoundingClientRect().x))
+        localStorage.setItem('coordY', JSON.stringify(appendItem.getBoundingClientRect().y))
         for (const block of blocks) {
             block.classList.remove('active');
         }
